@@ -3,7 +3,282 @@
    Enhanced visual design, better contrast, improved interactions
    ══════════════════════════════════════════════════════════════ */
 
+   /* ══════════════════════════════════════════════════════════════
+   SMOOTH SCROLLING & ANIMATION IMPROVEMENTS
+   ══════════════════════════════════════════════════════════════ */
+
+/* ══════ ENHANCED SMOOTH SCROLLING ══════ */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+    /* Enable hardware acceleration for smoother scrolling */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Momentum scrolling untuk iOS */
+body {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none; /* Prevent over-scroll bounce */
+}
+
+/* ══════ IMPROVED SCROLL PERFORMANCE ══════ */
+/* GPU acceleration untuk elements yang bergerak */
+#nav,
+.hero-content,
+.product-card,
+.stone-item,
+.section-separator,
+.rv,
+.img-rv {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform, opacity;
+}
+
+/* ══════ SMOOTHER TRANSITIONS ══════ */
+* {
+    /* Gunakan hardware-accelerated transitions */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ══════ ENHANCED SCROLL REVEAL ANIMATIONS ══════ */
+.rv {
+    opacity: 0;
+    transform: translateY(30px) translateZ(0);
+    transition: 
+        opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.rv.visible {
+    opacity: 1;
+    transform: translateY(0) translateZ(0);
+}
+
+.img-rv {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98) translateZ(0);
+    transition: 
+        opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        filter 0.3s ease;
+}
+
+.img-rv.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1) translateZ(0);
+}
+
+/* ══════ PARALLAX SCROLL EFFECT (Optional) ══════ */
+/* Subtle parallax untuk hero video */
+.hero-video-wrap {
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* ══════ SMOOTH NAVBAR TRANSITION ══════ */
+#nav {
+    transition: 
+        all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        background 0.3s ease,
+        box-shadow 0.3s ease;
+    will-change: transform, background, box-shadow;
+}
+
+/* ══════ IMPROVED CARD HOVER ANIMATIONS ══════ */
+.product-card,
+.stone-item {
+    transition: 
+        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.product-card-img,
+.stone-item img {
+    transition: 
+        transform 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        filter 0.4s ease;
+}
+
+/* ══════ SECTION SEPARATOR ANIMATION ══════ */
+.section-separator {
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent 0%,
+        var(--border) 20%,
+        var(--border) 80%,
+        transparent 100%
+    );
+    margin: 0 auto;
+    max-width: 1200px;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.section-separator.visible {
+    transform: scaleX(1);
+}
+
+/* ══════ STAGGER ANIMATIONS ══════ */
+.rv-d1 { transition-delay: 0.1s; }
+.rv-d2 { transition-delay: 0.2s; }
+.rv-d3 { transition-delay: 0.3s; }
+.rv-d4 { transition-delay: 0.4s; }
+
+.img-rv-d1 { transition-delay: 0.15s; }
+.img-rv-d2 { transition-delay: 0.3s; }
+.img-rv-d3 { transition-delay: 0.45s; }
+.img-rv-d4 { transition-delay: 0.6s; }
+
+/* ══════ ENHANCED BUTTON ANIMATIONS ══════ */
+.cta-btn-primary,
+.cta-btn-secondary,
+.hero-order-btn,
+.nav-order {
+    transition: 
+        all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+        transform 0.2s ease;
+}
+
+/* ══════ SCROLL-BASED FADE IN ══════ */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px) translateZ(0);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) translateZ(0);
+    }
+}
+
+/* ══════ MOBILE OPTIMIZATIONS ══════ */
+@media (max-width: 768px) {
+    /* Faster animations on mobile for better performance */
+    .rv,
+    .img-rv {
+        transition-duration: 0.6s;
+    }
+    
+    /* Reduce transform distance on mobile */
+    .rv {
+        transform: translateY(20px) translateZ(0);
+    }
+    
+    .img-rv {
+        transform: translateY(25px) scale(0.99) translateZ(0);
+    }
+}
+
+/* ══════ REDUCE MOTION SUPPORT ══════ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .rv,
+    .img-rv {
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
+}
+
+/* ══════ SCROLL SNAP (Optional - for sections) ══════ */
+/* Uncomment if you want snap scrolling between sections */
+/*
+body {
+    scroll-snap-type: y proximity;
+}
+
+section {
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+}
+*/
+
+/* ══════ IMPROVED 3D STONE ROTATION ══════ */
+.stone-3d {
+    transition: transform 0.05s ease-out;
+    will-change: transform;
+}
+
+/* ══════ SMOOTH OPACITY TRANSITIONS ══════ */
+.hero-video-overlay,
+.product-card-overlay,
+.stone-item-overlay {
+    transition: 
+        opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        background 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ══════ ENHANCED HOVER STATES ══════ */
+.nav-link,
+.footer-link {
+    transition: 
+        color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        transform 0.2s ease;
+}
+
+/* ══════ LAZY LOAD FADE IN ══════ */
+img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.4s ease-in;
+}
+
+img[loading="lazy"].loaded,
+img[loading="lazy"][src] {
+    opacity: 1;
+}
+
+/* ══════ CUSTOM SCROLLBAR (Enhanced) ══════ */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-primary);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-hover);
+}
+
+/* For Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-primary) var(--bg);
+}
+
+/* ══════ PREVENT LAYOUT SHIFT ══════ */
+/* Add this to prevent content jumping during animations */
+.hero-content,
+.intro-text,
+.section-heading {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
+}
+
 /* ══════ ENHANCED COLOR PALETTE ══════ */
+
 :root {
     --ink: #111111;
     --ink2: #1a1a1a;

@@ -1453,38 +1453,22 @@
                 <div class="product-card-overlay"></div>
                 <div class="product-card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
                 <div class="product-card-body">
-                    <div class="product-card-name">Villa Batu Alam</div>
-                    <div class="product-card-sub">Residential · Bali</div>
-                </div>
-</div>
-            <div class="product-card img-rv img-rv-d1">
-                <img src="{{ asset('images/hasil.png') }}" alt="Lobby Granit" class="product-card-img" loading="lazy">
-                <div class="product-card-overlay"></div>
-                <div class="product-card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="product-card-body">
                     <div class="product-card-name">Lobby Granit</div>
-                    <div class="product-card-sub">Commercial · Jakarta</div>
+
+                    <div class="product-card-sub">Residential · Yogyakarta</div>
                 </div>
             </div>
             <div class="product-card img-rv img-rv-d1">
-                <img src="{{ asset('images/hasil.png') }}" alt="Taman Landscape" class="product-card-img" loading="lazy">
+                <img src="{{ asset('images/image.png') }}" alt="Lobby Granit" class="product-card-img" loading="lazy">
                 <div class="product-card-overlay"></div>
                 <div class="product-card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
                 <div class="product-card-body">
-                    <div class="product-card-name">Taman Landscape</div>
-                    <div class="product-card-sub">Landscape · Bandung</div>
+                    <div class="product-card-name">Kolam renang</div>
+
+                    <div class="product-card-sub">Residential · Yogyakarta</div>
                 </div>
             </div>
-            <div class="product-card img-rv img-rv-d1">
-                <img src="{{ asset('images/hasil.png') }}" alt="Interior Stone" class="product-card-img" loading="lazy">
-                <div class="product-card-overlay"></div>
-                <div class="product-card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                <div class="product-card-body">
-                    <div class="product-card-name">Interior Stone</div>
-                    <div class="product-card-sub">Interior · Surabaya</div>
-                </div>
-            </div>
-        </div>
+
     </section>
 
     <!-- ADD: Section Separator -->
@@ -1627,7 +1611,6 @@
     </footer>
 
     <script>
-        const nav = document.getElementById('nav');
         window.addEventListener('scroll', () => {
             nav.classList.toggle('scrolled', scrollY > 60);
         }, {
@@ -1770,6 +1753,143 @@
             });
             document.addEventListener('touchend', onEnd);
         })();
+        // ══════ ENHANCED SMOOTH SCROLL REVEAL ══════
+        (function initSmoothScroll() {
+            // Intersection Observer dengan threshold dinamis
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Add visible class with slight delay for smoother effect
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, 50);
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            // Observe all reveal elements
+            document.querySelectorAll('.rv, .img-rv, .line-reveal, .section-separator').forEach(el => {
+                revealObserver.observe(el);
+            });
+        })();
+
+        // ══════ SMOOTH SCROLL FOR ANCHOR LINKS ══════
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                e.preventDefault();
+                const target = document.querySelector(targetId);
+
+                if (target) {
+                    const offsetTop = target.offsetTop - 80; // Account for fixed nav
+
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+
+                    // Update URL without jumping
+                    history.pushState(null, null, targetId);
+                }
+            });
+        });
+
+        // ══════ PARALLAX EFFECT FOR HERO VIDEO (Optional) ══════
+        let parallaxTicking = false;
+        window.addEventListener('scroll', () => {
+            if (!parallaxTicking) {
+                requestAnimationFrame(() => {
+                    const hero = document.getElementById('hero');
+                    if (hero) {
+                        const scrolled = window.scrollY;
+                        const videoWrap = hero.querySelector('.hero-video-wrap');
+
+                        if (scrolled < window.innerHeight && videoWrap) {
+                            // Subtle parallax effect
+                            videoWrap.style.transform = `translateY(${scrolled * 0.5}px)`;
+                        }
+
+                        // Enhanced overlay opacity
+                        const overlay = hero.querySelector('.hero-video-overlay');
+                        if (overlay && scrolled < window.innerHeight) {
+                            overlay.style.opacity = 0.35 + (scrolled / window.innerHeight) * 0.4;
+                        }
+                    }
+                    parallaxTicking = false;
+                });
+                parallaxTicking = true;
+            }
+        }, {
+            passive: true
+        });
+
+        // ══════ LAZY LOAD IMAGE FADE IN ══════
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.classList.add('loaded');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        // ══════ NAVBAR SCROLL ENHANCEMENT ══════
+        const nav = document.getElementById('nav');
+        let lastScrollTop = 0;
+        let scrollTimeout;
+
+        window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            // Add/remove scrolled class with smoother transition
+            nav.classList.toggle('scrolled', scrollTop > 60);
+
+            // Optional: Hide navbar on scroll down, show on scroll up
+            // Uncomment if you want this behavior
+            /*
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                nav.style.transform = 'translateY(-100%)';
+            } else {
+                nav.style.transform = 'translateY(0)';
+            }
+            */
+
+            lastScrollTop = scrollTop;
+        }, {
+            passive: true
+        });
+
+        // ══════ PERFORMANCE: Debounce Resize Events ══════
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                // Any resize-dependent calculations here
+                console.log('Window resized');
+            }, 250);
+        }, {
+            passive: true
+        });
+
+        // ══════ PREVENT SCROLL JANK ON MOBILE ══════
+        if ('ontouchstart' in window) {
+            document.body.classList.add('touch-device');
+        }
     </script>
 </body>
 
