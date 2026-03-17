@@ -4,44 +4,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
     <title>Form Pesanan — TierraStone</title>
+    <link rel="icon" type="image/avif" href="{{ asset('images/logos.avif') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
     <style>
-        /* ─── TOKENS — Moonstone (G11) Palette ─── */
         :root {
-            --p1: #e7ebf7;
-            --p2: #d9e3ec;
-            --p3: #bfd0e5;
-            --p4: #a6bddf;
-            --p5: #90add9;
-            --p6: #5a7fa8;
-            --p7: #3d6590;
-            --p8: #2b4f78;
-
-            --bg: #f6f8fb;
-            --surface: #eef2f7;
+            --ink: #111111;
+            --ink2: #1a1a1a;
+            --body: #555555;
+            --muted: #999999;
+            --subtle: #bbbbbb;
+            --border: #e0e0e0;
+            --border2: #ebebeb;
+            --bg: #f5f5f3;
+            --surface: #eaeae7;
             --white: #ffffff;
-            --ink: #1a2233;
-            --ink2: #2c3a4e;
-            --body: #4a5568;
-            --muted: #8694a7;
-            --subtle: #b8c4d0;
-            --border: #dce4ed;
-            --border2: #e8edf3;
-
-            --accent: #3d6590;
-            --accent2: #2b4f78;
-            --accent-light: #a6bddf;
+            --accent: #2a2a2a;
+            --ff-display: 'Playfair Display', Georgia, serif;
+            --ff-body: 'DM Sans', 'Helvetica Neue', sans-serif;
 
             --green: #16a34a;
             --green-bg: #f0fdf4;
             --green-border: #bbf7d0;
-            --red: #dc2626;
-            --red-bg: #fef2f2;
-            --red-border: #fecaca;
+            --red: #c53030;
+            --red-bg: #fff5f5;
+            --red-border: #fed7d7;
         }
 
         *,
@@ -58,57 +49,73 @@
         }
 
         body {
-            font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+            font-family: var(--ff-body);
             background: var(--bg);
             color: var(--ink);
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            opacity: 0;
+            animation: pageIn .6s .05s ease forwards;
         }
 
-        /* ─── NAV ─── */
+        @keyframes pageIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        ::selection {
+            background: var(--ink);
+            color: var(--white);
+        }
+
+        /* ══════ NAV ══════ */
         .nav {
             position: sticky;
             top: 0;
             z-index: 50;
-            background: rgba(255, 255, 255, .96);
-            backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, .97);
+            backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border2);
-            box-shadow: 0 1px 12px rgba(61, 101, 144, .04);
         }
 
         .nav-inner {
             max-width: 740px;
             margin: 0 auto;
             padding: 0 24px;
-            height: 58px;
+            height: 56px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .nav-logo {
-            font-family: 'Cormorant Garamond', serif;
-            font-weight: 700;
-            font-size: 22px;
-            letter-spacing: .06em;
+            font-family: var(--ff-display);
+            font-weight: 600;
+            font-size: 18px;
+            letter-spacing: .02em;
             color: var(--ink);
             text-decoration: none;
-        }
-
-        .nav-logo em {
-            font-style: normal;
-            color: var(--accent);
         }
 
         .nav-back {
             display: flex;
             align-items: center;
-            gap: 7px;
+            gap: 8px;
             font-size: 13px;
-            font-weight: 500;
+            font-weight: 400;
             color: var(--muted);
             text-decoration: none;
-            transition: color .18s;
+            transition: color .2s;
+            letter-spacing: .03em;
+            text-transform: uppercase;
         }
 
         .nav-back:hover {
@@ -119,63 +126,65 @@
             font-size: 10px;
         }
 
-        /* ─── PAGE HEADER ─── */
+        /* ══════ PAGE HEADER ══════ */
         .page-header {
             max-width: 740px;
             margin: 0 auto;
-            padding: 48px 24px 36px;
+            padding: 56px 24px 32px;
+            opacity: 0;
+            animation: fadeUp .6s .15s cubic-bezier(.16, 1, .3, 1) forwards;
         }
 
-        .page-header-eyebrow {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .page-header-label {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--muted);
             margin-bottom: 14px;
         }
 
-        .page-header-eyebrow span {
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: .14em;
-            text-transform: uppercase;
-            color: var(--muted);
-        }
-
-        .page-header-eyebrow::before,
-        .page-header-eyebrow::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-        }
-
         .page-header h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(30px, 5vw, 42px);
-            font-weight: 600;
+            font-family: var(--ff-display);
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 400;
             line-height: 1.1;
             color: var(--ink);
+            letter-spacing: -.01em;
         }
 
         .page-header h1 em {
             font-style: italic;
-            font-weight: 500;
-            color: var(--accent);
         }
 
         .page-header p {
-            margin-top: 10px;
+            margin-top: 12px;
             font-size: 15px;
             font-weight: 300;
             color: var(--body);
             line-height: 1.7;
+            max-width: 480px;
         }
 
-        /* ─── PROGRESS ─── */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ══════ PROGRESS ══════ */
         .progress-wrap {
             max-width: 740px;
             margin: 0 auto;
             padding: 0 24px 28px;
+            opacity: 0;
+            animation: fadeUp .6s .25s cubic-bezier(.16, 1, .3, 1) forwards;
         }
 
         .steps-row {
@@ -190,7 +199,7 @@
             align-items: center;
             gap: 8px;
             font-size: 13px;
-            font-weight: 500;
+            font-weight: 400;
             color: var(--subtle);
             transition: color .25s;
         }
@@ -204,21 +213,21 @@
         }
 
         .step-num {
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
-            border: 1.5px solid currentColor;
+            border: 1px solid currentColor;
             display: grid;
             place-items: center;
-            font-size: 11px;
-            font-weight: 600;
+            font-size: 12px;
+            font-weight: 500;
             flex-shrink: 0;
             transition: all .25s;
         }
 
         .step-item.active .step-num {
-            background: var(--accent);
-            border-color: var(--accent);
+            background: var(--ink);
+            border-color: var(--ink);
             color: white;
         }
 
@@ -232,62 +241,66 @@
             flex: 1;
             height: 1px;
             background: var(--border);
-            margin: 0 14px;
+            margin: 0 16px;
         }
 
         .progress-bar {
-            height: 2px;
+            height: 1px;
             background: var(--border2);
-            border-radius: 2px;
             overflow: hidden;
         }
 
         .progress-fill {
             height: 100%;
-            background: var(--accent);
-            border-radius: 2px;
+            background: var(--ink);
             transition: width .5s cubic-bezier(.4, 0, .2, 1);
         }
 
-        /* ─── MAIN CARD ─── */
+        /* ══════ MAIN ══════ */
         .main {
             max-width: 740px;
             margin: 0 auto;
             padding: 0 24px 64px;
+            opacity: 0;
+            animation: fadeUp .6s .35s cubic-bezier(.16, 1, .3, 1) forwards;
         }
 
         .form-card {
             background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 14px;
+            border: 1px solid var(--border2);
             overflow: hidden;
-            box-shadow: 0 1px 3px rgba(61, 101, 144, .04), 0 6px 28px rgba(61, 101, 144, .06);
         }
 
-        /* ─── SECTION HEADER ─── */
+        /* ══════ SECTION HEADERS ══════ */
         .section-head {
-            padding: 28px 32px 0;
+            padding: 32px 36px 0;
+        }
+
+        @media (max-width: 560px) {
+            .section-head {
+                padding: 24px 20px 0;
+            }
         }
 
         .section-label {
-            font-size: 10.5px;
-            font-weight: 600;
-            letter-spacing: .14em;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: .2em;
             text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 5px;
+            color: var(--muted);
+            margin-bottom: 6px;
         }
 
         .section-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 24px;
-            font-weight: 600;
+            font-family: var(--ff-display);
+            font-size: 26px;
+            font-weight: 400;
             color: var(--ink);
             line-height: 1.2;
         }
 
         .section-desc {
-            font-size: 13.5px;
+            font-size: 14px;
             color: var(--muted);
             margin-top: 4px;
             font-weight: 300;
@@ -296,15 +309,27 @@
         .divider {
             height: 1px;
             background: var(--border2);
-            margin: 28px 32px;
+            margin: 28px 36px;
         }
 
-        /* ─── FORM BODY ─── */
+        @media (max-width: 560px) {
+            .divider {
+                margin: 24px 20px;
+            }
+        }
+
+        /* ══════ FORM BODY ══════ */
         .form-body {
-            padding: 24px 32px 32px;
+            padding: 24px 36px 36px;
         }
 
-        /* ─── PRODUCT CARDS ─── */
+        @media (max-width: 560px) {
+            .form-body {
+                padding: 20px 20px 28px;
+            }
+        }
+
+        /* ══════ PRODUCT CARDS ══════ */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -312,11 +337,16 @@
             margin-bottom: 16px;
         }
 
+        @media (max-width: 560px) {
+            .product-grid {
+                gap: 8px;
+            }
+        }
+
         .prod-card {
             cursor: pointer;
             position: relative;
-            border-radius: 10px;
-            border: 1.5px solid var(--border);
+            border: 1px solid var(--border);
             background: var(--ink);
             transition: border-color .2s, box-shadow .2s, transform .2s;
             overflow: hidden;
@@ -325,12 +355,12 @@
         .prod-card:hover {
             border-color: var(--subtle);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(61, 101, 144, .1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
         }
 
         .prod-card.selected {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(61, 101, 144, .12), 0 6px 20px rgba(61, 101, 144, .12);
+            border-color: var(--ink);
+            box-shadow: 0 0 0 2px var(--ink), 0 8px 24px rgba(0, 0, 0, .08);
         }
 
         .prod-check {
@@ -340,7 +370,7 @@
             width: 22px;
             height: 22px;
             border-radius: 50%;
-            background: var(--accent);
+            background: var(--ink);
             color: white;
             display: grid;
             place-items: center;
@@ -364,6 +394,12 @@
             background: rgba(255, 255, 255, .04);
         }
 
+        @media (max-width: 560px) {
+            .prod-img {
+                height: 72px;
+            }
+        }
+
         .prod-img img {
             width: 100%;
             height: 100%;
@@ -380,11 +416,23 @@
             padding: 10px 14px 14px;
         }
 
+        @media (max-width: 560px) {
+            .prod-info {
+                padding: 8px 10px 10px;
+            }
+        }
+
         .prod-name {
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 500;
             color: white;
             line-height: 1.3;
+        }
+
+        @media (max-width: 560px) {
+            .prod-name {
+                font-size: 11.5px;
+            }
         }
 
         .prod-sub {
@@ -393,7 +441,13 @@
             margin-top: 2px;
         }
 
-        /* ─── SELECT WRAPPER ─── */
+        @media (max-width: 560px) {
+            .prod-sub {
+                font-size: 10px;
+            }
+        }
+
+        /* ══════ SELECT WRAPPER ══════ */
         .sel-wrap {
             position: relative;
         }
@@ -410,7 +464,7 @@
             border-top: 5px solid var(--muted);
         }
 
-        /* ─── INPUTS ─── */
+        /* ══════ INPUTS ══════ */
         .field {
             margin-bottom: 20px;
         }
@@ -422,8 +476,9 @@
         .label {
             display: block;
             font-size: 12px;
-            font-weight: 600;
-            letter-spacing: .04em;
+            font-weight: 500;
+            letter-spacing: .06em;
+            text-transform: uppercase;
             color: var(--ink2);
             margin-bottom: 7px;
         }
@@ -432,6 +487,7 @@
             font-size: 11px;
             font-weight: 400;
             letter-spacing: 0;
+            text-transform: none;
             color: var(--muted);
             margin-left: 4px;
         }
@@ -444,10 +500,10 @@
 
         .input {
             width: 100%;
-            padding: 11px 14px;
-            border: 1.5px solid var(--border);
-            border-radius: 8px;
-            font-family: 'Source Sans 3', sans-serif;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 0;
+            font-family: var(--ff-body);
             font-size: 14.5px;
             font-weight: 400;
             background: var(--white);
@@ -455,12 +511,12 @@
             outline: none;
             appearance: none;
             -webkit-appearance: none;
-            transition: border-color .18s, box-shadow .18s;
+            transition: border-color .2s, box-shadow .2s;
         }
 
         .input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(61, 101, 144, .1);
+            border-color: var(--ink);
+            box-shadow: 0 0 0 1px var(--ink);
         }
 
         .input::placeholder {
@@ -479,7 +535,6 @@
             font-weight: 300;
         }
 
-        /* Grid cols */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -492,6 +547,16 @@
             gap: 16px;
         }
 
+        @media (max-width: 560px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-3 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
         /* Phone prefix */
         .phone-wrap {
             display: flex;
@@ -502,23 +567,21 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 11px 14px;
-            background: var(--surface);
+            padding: 12px 14px;
+            background: var(--bg);
             color: var(--body);
-            border: 1.5px solid var(--border);
+            border: 1px solid var(--border);
             border-right: none;
-            border-radius: 8px 0 0 8px;
             font-size: 13.5px;
             font-weight: 500;
             flex-shrink: 0;
         }
 
         .phone-wrap .input {
-            border-radius: 0 8px 8px 0;
             flex: 1;
         }
 
-        /* ─── FINISHING CHIPS ─── */
+        /* ══════ FINISHING CHIPS ══════ */
         .chips {
             display: flex;
             flex-wrap: wrap;
@@ -526,27 +589,27 @@
         }
 
         .chip {
-            padding: 8px 16px;
-            border-radius: 6px;
-            border: 1.5px solid var(--border);
-            font-family: 'Source Sans 3', sans-serif;
+            padding: 9px 18px;
+            border: 1px solid var(--border);
+            font-family: var(--ff-body);
             font-size: 13px;
             font-weight: 400;
             cursor: pointer;
             background: var(--white);
             color: var(--body);
             user-select: none;
-            transition: all .16s ease;
+            transition: all .2s ease;
+            letter-spacing: .02em;
         }
 
         .chip:hover {
-            border-color: var(--accent);
-            color: var(--accent);
+            border-color: var(--ink);
+            color: var(--ink);
         }
 
         .chip.active {
-            background: var(--accent);
-            border-color: var(--accent);
+            background: var(--ink);
+            border-color: var(--ink);
             color: white;
             font-weight: 500;
         }
@@ -560,7 +623,7 @@
             display: block;
         }
 
-        /* ─── BUTTONS ─── */
+        /* ══════ BUTTONS ══════ */
         .btn-row {
             display: flex;
             align-items: center;
@@ -573,50 +636,54 @@
         .btn-primary {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 12px 28px;
-            background: var(--accent);
+            gap: 10px;
+            padding: 14px 32px;
+            background: var(--ink);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-family: 'Source Sans 3', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: .02em;
+            font-family: var(--ff-body);
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: .06em;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: background .18s, transform .15s, box-shadow .18s;
-            box-shadow: 0 2px 10px rgba(61, 101, 144, .2);
+            transition: all .3s cubic-bezier(.16, 1, .3, 1);
         }
 
         .btn-primary:hover {
-            background: var(--accent2);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 18px rgba(61, 101, 144, .28);
+            background: var(--ink2);
+            padding-right: 40px;
         }
 
-        .btn-primary:active {
-            transform: translateY(0);
+        .btn-primary i {
+            font-size: 10px;
+            transition: transform .3s ease;
+        }
+
+        .btn-primary:hover i {
+            transform: translateX(4px);
         }
 
         .btn-ghost {
             display: inline-flex;
             align-items: center;
-            gap: 7px;
-            padding: 11px 20px;
+            gap: 8px;
+            padding: 13px 24px;
             background: transparent;
             color: var(--muted);
-            border: 1.5px solid var(--border);
-            border-radius: 8px;
-            font-family: 'Source Sans 3', sans-serif;
-            font-size: 13.5px;
-            font-weight: 500;
+            border: 1px solid var(--border);
+            font-family: var(--ff-body);
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: .04em;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: all .18s;
+            transition: all .2s;
         }
 
         .btn-ghost:hover {
-            color: var(--accent);
-            border-color: var(--accent);
+            color: var(--ink);
+            border-color: var(--ink);
         }
 
         .btn-wa {
@@ -625,30 +692,30 @@
             justify-content: center;
             gap: 10px;
             width: 100%;
-            padding: 14px;
+            padding: 16px;
             background: #16a34a;
             color: white;
             border: none;
-            border-radius: 8px;
-            font-family: 'Source Sans 3', sans-serif;
-            font-size: 15px;
+            font-family: var(--ff-body);
+            font-size: 14px;
             font-weight: 600;
+            letter-spacing: .04em;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: background .18s, transform .15s, box-shadow .18s;
-            box-shadow: 0 2px 12px rgba(22, 163, 74, .2);
+            transition: all .3s cubic-bezier(.16, 1, .3, 1);
         }
 
         .btn-wa:hover {
             background: #15803d;
             transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(22, 163, 74, .25);
+            box-shadow: 0 8px 24px rgba(22, 163, 74, .2);
         }
 
         .btn-wa i {
             font-size: 18px;
         }
 
-        /* ─── ERROR BOX ─── */
+        /* ══════ ERROR BOX ══════ */
         .error-box {
             display: none;
             align-items: center;
@@ -657,7 +724,6 @@
             margin-top: 18px;
             background: var(--red-bg);
             border: 1px solid var(--red-border);
-            border-radius: 8px;
             font-size: 13.5px;
             color: #b91c1c;
         }
@@ -666,7 +732,7 @@
             display: flex;
         }
 
-        /* ─── STEP TRANSITIONS ─── */
+        /* ══════ STEP TRANSITIONS ══════ */
         .form-step {
             display: none;
         }
@@ -678,36 +744,36 @@
         @keyframes slideInRight {
             from {
                 opacity: 0;
-                transform: translateX(24px)
+                transform: translateX(24px);
             }
 
             to {
                 opacity: 1;
-                transform: translateX(0)
+                transform: translateX(0);
             }
         }
 
         @keyframes slideInLeft {
             from {
                 opacity: 0;
-                transform: translateX(-24px)
+                transform: translateX(-24px);
             }
 
             to {
                 opacity: 1;
-                transform: translateX(0)
+                transform: translateX(0);
             }
         }
 
         @keyframes slideOutLeft {
             from {
                 opacity: 1;
-                transform: translateX(0)
+                transform: translateX(0);
             }
 
             to {
                 opacity: 0;
-                transform: translateX(-18px)
+                transform: translateX(-18px);
             }
         }
 
@@ -723,21 +789,20 @@
             animation: slideOutLeft .18s ease forwards;
         }
 
-        /* ─── SUMMARY (step 2) ─── */
+        /* ══════ SUMMARY (step 2) ══════ */
         .summary-block {
-            border: 1px solid var(--border);
-            border-radius: 10px;
+            border: 1px solid var(--border2);
             overflow: hidden;
             margin-bottom: 16px;
         }
 
         .summary-head {
             padding: 12px 18px;
-            background: var(--surface);
+            background: var(--bg);
             border-bottom: 1px solid var(--border2);
             font-size: 11px;
-            font-weight: 600;
-            letter-spacing: .12em;
+            font-weight: 500;
+            letter-spacing: .16em;
             text-transform: uppercase;
             color: var(--muted);
         }
@@ -775,7 +840,6 @@
             margin-bottom: 20px;
             background: var(--green-bg);
             border: 1px solid var(--green-border);
-            border-radius: 8px;
             font-size: 13.5px;
             color: #15803d;
         }
@@ -786,13 +850,13 @@
             flex-shrink: 0;
         }
 
-        /* ─── TRUST ROW ─── */
+        /* ══════ TRUST ROW ══════ */
         .trust-row {
             display: flex;
             justify-content: center;
             gap: 28px;
             flex-wrap: wrap;
-            padding: 24px 24px 0;
+            padding: 28px 24px 0;
             max-width: 740px;
             margin: 0 auto;
         }
@@ -801,19 +865,20 @@
             display: flex;
             align-items: center;
             gap: 7px;
-            font-size: 12.5px;
+            font-size: 12px;
             color: var(--muted);
             font-weight: 400;
+            letter-spacing: .02em;
         }
 
         .trust-item i {
             font-size: 12px;
         }
 
-        /* ─── FOOTER ─── */
+        /* ══════ FOOTER ══════ */
         footer {
             border-top: 1px solid var(--border2);
-            padding: 28px 24px;
+            padding: 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -824,39 +889,36 @@
         }
 
         .footer-logo {
-            font-family: 'Cormorant Garamond', serif;
-            font-weight: 700;
-            font-size: 18px;
-            letter-spacing: .06em;
+            font-family: var(--ff-display);
+            font-weight: 600;
+            font-size: 16px;
+            letter-spacing: .02em;
             color: var(--ink);
         }
 
-        .footer-logo em {
-            font-style: normal;
-            color: var(--accent);
-        }
-
         .footer-copy {
-            font-size: 11.5px;
+            font-size: 11px;
+            font-weight: 300;
             color: var(--subtle);
+            letter-spacing: .04em;
         }
 
-        /* ─── MISC ─── */
+        /* ══════ MISC ══════ */
         @keyframes shake {
 
             0%,
             100% {
-                transform: translateX(0)
+                transform: translateX(0);
             }
 
             20%,
             60% {
-                transform: translateX(-5px)
+                transform: translateX(-5px);
             }
 
             40%,
             80% {
-                transform: translateX(5px)
+                transform: translateX(5px);
             }
         }
 
@@ -873,13 +935,8 @@
             -moz-appearance: textfield;
         }
 
-        ::selection {
-            background: var(--accent);
-            color: white;
-        }
-
         ::-webkit-scrollbar {
-            width: 4px;
+            width: 3px;
         }
 
         ::-webkit-scrollbar-track {
@@ -887,55 +944,7 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 4px;
-        }
-
-        @media (max-width: 560px) {
-            .product-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 8px;
-            }
-
-            .grid-2 {
-                grid-template-columns: 1fr;
-            }
-
-            .grid-3 {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .form-body {
-                padding: 20px 20px 28px;
-            }
-
-            .section-head {
-                padding: 24px 20px 0;
-            }
-
-            .divider {
-                margin: 24px 20px;
-            }
-
-            .page-header {
-                padding: 32px 20px 24px;
-            }
-
-            .prod-img {
-                height: 72px;
-            }
-
-            .prod-name {
-                font-size: 11.5px;
-            }
-
-            .prod-sub {
-                font-size: 10px;
-            }
-
-            .prod-info {
-                padding: 8px 10px 10px;
-            }
+            background: var(--subtle);
         }
     </style>
 </head>
@@ -945,7 +954,7 @@
     <!-- NAV -->
     <nav class="nav">
         <div class="nav-inner">
-            <a href="{{ route('welcome') }}" class="nav-logo">Tierra<em>Stone</em></a>
+            <a href="{{ route('welcome') }}" class="nav-logo">TierraStone</a>
             <a href="{{ route('welcome') }}" class="nav-back">
                 <i class="fa-solid fa-arrow-left"></i> Kembali
             </a>
@@ -954,9 +963,7 @@
 
     <!-- PAGE HEADER -->
     <div class="page-header">
-        <div class="page-header-eyebrow">
-            <span>Form Pemesanan</span>
-        </div>
+        <div class="page-header-label">Form Pemesanan</div>
         <h1>Buat Pesanan <em>Baru</em></h1>
         <p>Lengkapi spesifikasi batu dan data kontak Anda. Tim kami akan menghubungi via WhatsApp.</p>
     </div>
@@ -986,7 +993,6 @@
             <!-- ═══ STEP 1 ═══ -->
             <div class="form-step active" id="step-1">
 
-                <!-- Section: Jenis Batu -->
                 <div class="section-head">
                     <div class="section-label">01 — Jenis Batu</div>
                     <div class="section-title">Pilih Material</div>
@@ -994,7 +1000,6 @@
                 </div>
 
                 <div class="form-body" style="padding-bottom: 0">
-                    <!-- Product cards -->
                     <div class="product-grid" id="product-list">
                         <div class="prod-card" data-product="Marmer Premium" onclick="selectProduct(this)">
                             <div class="prod-check"><i class="fa-solid fa-check"></i></div>
@@ -1044,36 +1049,33 @@
                             </select>
                         </div>
                         <div id="jenis-custom-wrap" style="display:none; margin-top:10px">
-                            <input type="text" id="jenis-custom" class="input"
-                                placeholder="Tulis jenis batu yang Anda inginkan...">
+                            <input type="text" id="jenis-custom" class="input" placeholder="Tulis jenis batu yang Anda inginkan...">
                         </div>
                     </div>
                 </div>
 
                 <div class="divider"></div>
 
-                <!-- Section: Spesifikasi -->
                 <div class="section-head">
                     <div class="section-label">02 — Spesifikasi</div>
                     <div class="section-title">Dimensi & Finishing</div>
                 </div>
 
                 <div class="form-body">
-
                     <div class="field">
                         <label class="label">Dimensi <span class="req">*</span></label>
                         <div class="grid-3">
                             <div>
                                 <input type="number" id="length" class="input" placeholder="Panjang" min="1">
-                                <div class="input-hint">Panjang (cm)</div>
+                                <div class="input-hint">Panjang</div>
                             </div>
                             <div>
                                 <input type="number" id="width" class="input" placeholder="Lebar" min="1">
-                                <div class="input-hint">Lebar (cm)</div>
+                                <div class="input-hint">Lebar</div>
                             </div>
                             <div>
                                 <input type="number" id="thickness" class="input" placeholder="1.2" min="0" step="0.1">
-                                <div class="input-hint">Tebal (cm)</div>
+                                <div class="input-hint">Tebal</div>
                             </div>
                         </div>
                     </div>
@@ -1096,7 +1098,6 @@
 
                     <div class="divider" style="margin: 24px 0"></div>
 
-                    <!-- Informasi Diri -->
                     <div class="section-label" style="margin-bottom:14px">03 — Data Pemesan</div>
 
                     <div class="field">
@@ -1125,7 +1126,6 @@
                             style="resize:vertical; min-height:80px; line-height:1.6"></textarea>
                     </div>
 
-                    <!-- Error -->
                     <div class="error-box shake" id="step1-error">
                         <i class="fa-solid fa-circle-exclamation"></i>
                         <span id="s1-msg"></span>
@@ -1136,17 +1136,14 @@
                             <span style="color:var(--red)">*</span> Wajib diisi
                         </span>
                         <button class="btn-primary" onclick="goStep2()" type="button">
-                            Review Pesanan <i class="fa-solid fa-arrow-right" style="font-size:11px"></i>
+                            Review Pesanan <i class="fa-solid fa-arrow-right" style="font-size:10px"></i>
                         </button>
                     </div>
                 </div>
-
             </div>
-            <!-- /step-1 -->
 
             <!-- ═══ STEP 2 ═══ -->
             <div class="form-step" id="step-2">
-
                 <div class="section-head">
                     <div class="section-label">Konfirmasi</div>
                     <div class="section-title">Periksa Detail</div>
@@ -1154,7 +1151,6 @@
                 </div>
 
                 <div class="form-body">
-
                     <div class="summary-block">
                         <div class="summary-head">Spesifikasi Material</div>
                         <div class="sum-row"><span class="sum-lbl">Jenis Batu</span><span class="sum-val" id="s-produk">—</span></div>
@@ -1184,10 +1180,8 @@
                             <i class="fa-solid fa-arrow-left" style="font-size:10px"></i> Edit Pesanan
                         </button>
                     </div>
-
                 </div>
             </div>
-            <!-- /step-2 -->
 
         </div>
     </main>
@@ -1195,13 +1189,13 @@
     <!-- Trust row -->
     <div class="trust-row">
         <div class="trust-item"><i class="fa-solid fa-lock" style="color:var(--green)"></i> Data aman & privat</div>
-        <div class="trust-item"><i class="fa-regular fa-clock" style="color:var(--accent)"></i> Respons jam kerja</div>
-        <div class="trust-item"><i class="fa-solid fa-truck-fast" style="color:var(--p6)"></i> Kirim seluruh Indonesia</div>
+        <div class="trust-item"><i class="fa-regular fa-clock" style="color:var(--ink)"></i> Respons jam kerja</div>
+        <div class="trust-item"><i class="fa-solid fa-truck-fast" style="color:var(--muted)"></i> Kirim seluruh Indonesia</div>
     </div>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-logo">Tierra<em>Stone</em></div>
+        <div class="footer-logo">TierraStone</div>
         <div class="footer-copy">&copy; 2026 TierraStone. All rights reserved.</div>
     </footer>
 
@@ -1210,7 +1204,6 @@
         let selectedProduct = '',
             selectedFinishing = '';
 
-        // ── INIT ──
         window.addEventListener('DOMContentLoaded', () => {
             const p = new URLSearchParams(window.location.search).get('product');
             if (p) {
@@ -1234,7 +1227,6 @@
             });
         });
 
-        // ── PRODUCT SELECT ──
         function selectProduct(el) {
             document.querySelectorAll('.prod-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
@@ -1280,7 +1272,6 @@
             return selectedProduct;
         }
 
-        // ── CHIPS ──
         function selectChip(el) {
             const val = el.dataset.val;
             if (val === '__custom__') {
@@ -1316,18 +1307,14 @@
         }
 
         function getFinishingValue() {
-            return document.getElementById('finishing-custom').value.trim() ||
-                document.getElementById('finishing').value;
+            return document.getElementById('finishing-custom').value.trim() || document.getElementById('finishing').value;
         }
 
-        // ── STEP NAV ──
         function goStep2() {
             const produk = getProductValue();
             if (!produk) {
                 const dd = document.getElementById('jenis-batu');
-                return showErr(dd.value === 'Lainnya' ?
-                    'Tulis jenis batu yang Anda inginkan.' :
-                    'Pilih jenis batu terlebih dahulu.');
+                return showErr(dd.value === 'Lainnya' ? 'Tulis jenis batu yang Anda inginkan.' : 'Pilih jenis batu terlebih dahulu.');
             }
             const len = document.getElementById('length').value.trim();
             const wid = document.getElementById('width').value.trim();
@@ -1398,7 +1385,6 @@
             setTimeout(() => box.classList.remove('visible'), 4500);
         }
 
-        // ── SUMMARY ──
         function fillSummary() {
             const g = id => document.getElementById(id)?.value?.trim() ?? '';
             const len = g('length'),
@@ -1407,8 +1393,8 @@
             const fin = getFinishingValue();
             const email = g('email');
             const catatan = g('catatan');
-            let dimStr = `${len} × ${wid} cm`;
-            if (thick) dimStr += ` · ${thick} cm tebal`;
+            let dimStr = `${len} × ${wid}`;
+            if (thick) dimStr += ` ketebalan: ${thick}`;
             document.getElementById('s-produk').textContent = getProductValue();
             document.getElementById('s-dimensi').textContent = dimStr;
             document.getElementById('s-finishing-val').textContent = fin || '—';
@@ -1423,7 +1409,6 @@
             cr.style.display = 'flex';
         }
 
-        // ── SEND WA ──
         function kirimWA() {
             const g = id => document.getElementById(id)?.value?.trim() ?? '';
             const len = g('length'),
@@ -1433,23 +1418,10 @@
             const email = g('email');
             const note = g('catatan') || '-';
             const produk = getProductValue();
-            let dimLine = `${len} × ${wid} cm`;
-            if (thick) dimLine += `, tebal ${thick} cm`;
+            let dimLine = `${len} × ${wid} `;
+            if (thick) dimLine += `, tebal ${thick} `;
             const msg =
-                `Halo TierraStone!
-
-Saya ingin memesan batu alam:
-
-*Jenis Batu:* ${produk}
-*Dimensi(panjang x lebar):* ${dimLine}${fin ? `\n*Finishing:* ${fin}` : ''}
-
-*Data Pemesan:*
-Nama: ${g('nama')}
-No. WA: +62${g('phone')}${email ? '\nEmail: ' + email : ''}
-
-*Catatan:* ${note}
-
-Mohon informasi selanjutnya. Terima kasih!`;
+                `Halo TierraStone!\n\nSaya ingin memesan batu alam:\n\n*Jenis Batu:* ${produk}\n*Dimensi(panjang x lebar):* ${dimLine}${fin ? `\n*Finishing:* ${fin}` : ''}\n\n*Data Pemesan:*\nNama: ${g('nama')}\nNo. WA: +62${g('phone')}${email ? '\nEmail: ' + email : ''}\n\n*Catatan:* ${note}\n\nMohon informasi selanjutnya. Terima kasih!`;
             window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
         }
     </script>

@@ -4,27 +4,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
     <title>Lacak Pesanan – TierraStone</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/avif" href="{{ asset('images/logos.avif') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
     <style>
-        /* ── TOKENS (identik welcome & order) ── */
         :root {
-            --ink: #0f1923;
-            --ink2: #2d3f52;
-            --body: #4a6278;
-            --muted: #8aa0b4;
-            --border: #d6e4f0;
-            --surface: #eef5fb;
-            --bg: #f5f9fd;
+            --ink: #111111;
+            --ink2: #1a1a1a;
+            --body: #555555;
+            --muted: #999999;
+            --subtle: #bbbbbb;
+            --border: #e0e0e0;
+            --border2: #ebebeb;
+            --bg: #f5f5f3;
+            --surface: #eaeae7;
             --white: #ffffff;
-            --blue: #2a7de1;
-            --blue2: #1a60c0;
-            --blue-lt: #dbeeff;
-            --blue-xs: #f0f7ff;
-            --stone: #b0c4d8;
+            --accent: #2a2a2a;
+            --ff-display: 'Playfair Display', Georgia, serif;
+            --ff-body: 'DM Sans', 'Helvetica Neue', sans-serif;
+            --green: #16a34a;
+            --green-bg: #f0fdf4;
+            --green-border: #bbf7d0;
+            --yellow-bg: #fefce8;
+            --yellow-border: #fef08a;
+            --yellow-text: #854d0e;
+            --blue-bg: #eff6ff;
+            --blue-border: #bfdbfe;
+            --blue-text: #1e40af;
+            --orange-bg: #fff7ed;
+            --orange-border: #fed7aa;
+            --orange-text: #9a3412;
+            --purple-bg: #faf5ff;
+            --purple-border: #e9d5ff;
+            --purple-text: #6b21a8;
         }
 
         *,
@@ -37,154 +53,23 @@
 
         html {
             scroll-behavior: smooth;
+            font-size: 16px;
         }
 
         body {
-            font-family: 'Syne', sans-serif;
+            font-family: var(--ff-body);
             background: var(--bg);
             color: var(--ink);
             min-height: 100vh;
-            cursor: none;
+            -webkit-font-smoothing: antialiased;
+            opacity: 0;
+            animation: pageIn .6s .05s ease forwards;
         }
 
-        /* ── CURSOR ── */
-        .cur-dot {
-            width: 7px;
-            height: 7px;
-            background: var(--blue);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-        }
-
-        .cur-ring {
-            width: 32px;
-            height: 32px;
-            border: 1.5px solid rgba(42, 125, 225, .35);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: width .3s, height .3s, border-color .3s;
-        }
-
-        body:has(a:hover) .cur-ring,
-        body:has(button:hover) .cur-ring {
-            width: 48px;
-            height: 48px;
-            border-color: var(--blue);
-        }
-
-        /* ── NOISE ── */
-        .noise {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 200;
-            opacity: .25;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
-        }
-
-        /* ── BG BLOBS ── */
-        .bg-blobs {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .bg-blobs::before {
-            content: '';
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(42, 125, 225, .07) 0%, transparent 70%);
-            top: -150px;
-            right: -150px;
-        }
-
-        .bg-blobs::after {
-            content: '';
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(62, 207, 207, .05) 0%, transparent 70%);
-            bottom: -100px;
-            left: -100px;
-        }
-
-        /* ── NAV (identik) ── */
-        nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(245, 249, 253, .92);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            box-shadow: 0 2px 24px rgba(42, 125, 225, .06);
-        }
-
-        .nav-logo {
-            font-family: 'Syne', sans-serif;
-            font-weight: 800;
-            font-size: 19px;
-            letter-spacing: .14em;
-            text-transform: uppercase;
-            color: var(--ink);
-            text-decoration: none;
-        }
-
-        .nav-logo span {
-            color: var(--blue);
-        }
-
-        .nav-link-sm {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: .08em;
-            text-transform: uppercase;
-            color: var(--body);
-            text-decoration: none;
-            transition: color .2s;
-        }
-
-        .nav-link-sm:hover {
-            color: var(--blue);
-        }
-
-        .nav-cta-sm {
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: .09em;
-            text-transform: uppercase;
-            color: var(--white);
-            background: var(--blue);
-            padding: 9px 20px;
-            border-radius: 2px;
-            text-decoration: none;
-            transition: all .25s ease;
-            box-shadow: 0 4px 14px rgba(42, 125, 225, .28);
-        }
-
-        .nav-cta-sm:hover {
-            background: var(--blue2);
-            transform: translateY(-1px);
-        }
-
-        /* ── PAGE ENTRANCE ── */
-        @keyframes fadeUp {
+        @keyframes pageIn {
             from {
                 opacity: 0;
-                transform: translateY(24px);
+                transform: translateY(10px);
             }
 
             to {
@@ -193,191 +78,413 @@
             }
         }
 
-        .pu {
+        ::selection {
+            background: var(--ink);
+            color: var(--white);
+        }
+
+        /* NAV */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, .97);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border2);
+        }
+
+        .nav-inner {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-family: var(--ff-display);
+            font-weight: 600;
+            font-size: 18px;
+            letter-spacing: .02em;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-link {
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color .2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-link:hover {
+            color: var(--ink);
+        }
+
+        .nav-link i {
+            font-size: 10px;
+        }
+
+        .nav-cta {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--white);
+            text-decoration: none;
+            background: var(--ink);
+            padding: 9px 22px;
+            transition: all .3s cubic-bezier(.16, 1, .3, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-cta:hover {
+            background: var(--ink2);
+        }
+
+        .nav-cta i {
+            font-size: 10px;
+        }
+
+        @media (max-width:560px) {
+            .nav-cta {
+                display: none;
+            }
+        }
+
+        /* PAGE HEADER */
+        .page-header {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 64px 24px 36px;
+            text-align: center;
             opacity: 0;
-            animation: fadeUp .55s cubic-bezier(.22, 1, .36, 1) both;
+            animation: fadeUp .6s .15s cubic-bezier(.16, 1, .3, 1) forwards;
         }
 
-        .d1 {
-            animation-delay: .06s;
+        .page-header-label {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 16px;
         }
 
-        .d2 {
-            animation-delay: .14s;
+        .page-header h1 {
+            font-family: var(--ff-display);
+            font-size: clamp(36px, 5vw, 52px);
+            font-weight: 400;
+            line-height: 1.05;
+            color: var(--ink);
+            letter-spacing: -.01em;
         }
 
-        .d3 {
-            animation-delay: .22s;
+        .page-header h1 em {
+            font-style: italic;
         }
 
-        /* ── MAIN CARD ── */
-        .card {
+        .page-header p {
+            margin-top: 14px;
+            font-size: 15px;
+            font-weight: 300;
+            color: var(--body);
+            line-height: 1.7;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* MAIN */
+        .main {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 24px 80px;
+        }
+
+        /* SEARCH */
+        .search-card {
             background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            box-shadow: 0 2px 8px rgba(42, 125, 225, .04), 0 12px 48px rgba(42, 125, 225, .07);
+            border: 1px solid var(--border2);
+            padding: 28px;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeUp .6s .25s cubic-bezier(.16, 1, .3, 1) forwards;
         }
 
-        /* ── SEARCH BAR ── */
         .search-wrap {
             position: relative;
         }
 
         .search-wrap input {
             width: 100%;
-            padding: 14px 56px 14px 20px;
-            border: 1.5px solid var(--border);
-            border-radius: 12px;
-            font-family: 'Syne', sans-serif;
-            font-size: 14px;
+            padding: 14px 56px 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 0;
+            font-family: var(--ff-body);
+            font-size: 14.5px;
+            font-weight: 400;
             background: var(--white);
             color: var(--ink);
             outline: none;
-            transition: border-color .2s, box-shadow .2s, transform .15s;
+            transition: border-color .2s, box-shadow .2s;
         }
 
         .search-wrap input:focus {
-            border-color: var(--blue);
-            box-shadow: 0 0 0 4px rgba(42, 125, 225, .1);
-            transform: translateY(-1px);
+            border-color: var(--ink);
+            box-shadow: 0 0 0 1px var(--ink);
         }
 
         .search-wrap input::placeholder {
-            color: var(--stone);
+            color: var(--subtle);
+            font-weight: 300;
         }
 
         .search-wrap button {
             position: absolute;
-            right: 8px;
+            right: 6px;
             top: 50%;
             transform: translateY(-50%);
-            background: var(--blue);
+            background: var(--ink);
             color: white;
             border: none;
-            width: 38px;
-            height: 38px;
-            border-radius: 9px;
+            width: 40px;
+            height: 40px;
             cursor: pointer;
             display: grid;
             place-items: center;
             font-size: 13px;
-            transition: background .2s, transform .2s;
+            transition: background .2s;
         }
 
         .search-wrap button:hover {
-            background: var(--blue2);
-            transform: translateY(-50%) scale(1.05);
+            background: var(--ink2);
         }
 
-        /* ── ORDER ROW ── */
+        .search-hint {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 12px;
+            font-weight: 300;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .search-hint i {
+            font-size: 11px;
+            color: var(--subtle);
+        }
+
+        /* RESULTS */
+        #results-area {
+            opacity: 0;
+            animation: fadeUp .6s .35s cubic-bezier(.16, 1, .3, 1) forwards;
+        }
+
+        .results-card {
+            background: var(--white);
+            border: 1px solid var(--border2);
+            padding: 24px;
+        }
+
+        .results-count {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+
+        .results-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* ORDER ROW */
         .order-row {
             display: flex;
             align-items: center;
             gap: 14px;
-            padding: 14px 18px;
-            border-radius: 12px;
-            border: 1.5px solid var(--border);
+            padding: 16px 18px;
+            border: 1px solid var(--border2);
             background: var(--white);
             cursor: pointer;
-            transition: all .22s ease;
+            transition: all .25s ease;
+            text-decoration: none;
         }
 
         .order-row:hover {
-            border-color: var(--blue);
-            box-shadow: 0 4px 16px rgba(42, 125, 225, .1);
+            border-color: var(--ink);
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .06);
         }
 
         .order-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: var(--blue-xs);
-            border: 1px solid var(--blue-lt);
+            width: 42px;
+            height: 42px;
+            background: var(--bg);
+            border: 1px solid var(--border);
             display: grid;
             place-items: center;
             flex-shrink: 0;
-            color: var(--blue);
-            font-size: 13px;
+            color: var(--muted);
+            font-size: 14px;
         }
 
-        /* ── STATUS BADGES ── */
+        .order-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .order-id {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        .order-meta {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 300;
+            margin-top: 2px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .order-chevron {
+            color: var(--subtle);
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+
+        /* BADGES */
         .badge {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 4px 11px;
-            border-radius: 999px;
+            gap: 5px;
+            padding: 4px 12px;
             font-size: 11px;
-            font-weight: 700;
+            font-weight: 500;
             white-space: nowrap;
-            letter-spacing: .04em;
+            letter-spacing: .03em;
         }
 
         .badge-pending {
-            background: #fef9c3;
-            color: #92400e;
+            background: var(--yellow-bg);
+            color: var(--yellow-text);
+            border: 1px solid var(--yellow-border);
         }
 
-        .badge-process {
-            background: var(--blue-lt);
-            color: var(--blue2);
+        .badge-production {
+            background: var(--blue-bg);
+            color: var(--blue-text);
+            border: 1px solid var(--blue-border);
         }
 
-        .badge-shipped {
-            background: #d1fae5;
-            color: #065f46;
+        .badge-on_working {
+            background: var(--orange-bg);
+            color: var(--orange-text);
+            border: 1px solid var(--orange-border);
+        }
+
+        .badge-ready_to_send {
+            background: var(--purple-bg);
+            color: var(--purple-text);
+            border: 1px solid var(--purple-border);
         }
 
         .badge-done {
-            background: #f0fdf4;
+            background: var(--green-bg);
             color: #166534;
-            border: 1px solid #bbf7d0;
+            border: 1px solid var(--green-border);
         }
 
-        .badge-cancel {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        /* ── SKELETON ── */
+        /* SKELETON */
         .skeleton {
-            background: linear-gradient(90deg, var(--surface) 25%, var(--blue-xs) 50%, var(--surface) 75%);
+            background: linear-gradient(90deg, var(--surface) 25%, var(--border2) 50%, var(--surface) 75%);
             background-size: 200% 100%;
             animation: shimmer 1.4s infinite;
-            border-radius: 10px;
         }
 
         @keyframes shimmer {
             from {
-                background-position: 200% 0
+                background-position: 200% 0;
             }
 
             to {
-                background-position: -200% 0
+                background-position: -200% 0;
             }
         }
 
-        /* ── EMPTY STATE ── */
+        /* EMPTY */
         .empty-state {
             text-align: center;
-            padding: 52px 24px;
+            padding: 56px 24px;
+            background: var(--white);
+            border: 1px solid var(--border2);
         }
 
-        .empty-state i {
-            font-size: 36px;
-            margin-bottom: 14px;
-            display: block;
-            color: var(--stone);
+        .empty-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            display: grid;
+            place-items: center;
+            margin: 0 auto 16px;
+            color: var(--subtle);
+            font-size: 20px;
         }
 
-        /* ── MODAL ── */
+        .empty-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--ink);
+            margin-bottom: 6px;
+        }
+
+        .empty-desc {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 300;
+        }
+
+        /* MODAL */
         #modal-overlay {
             position: fixed;
             inset: 0;
             z-index: 500;
-            background: rgba(15, 25, 35, .45);
-            backdrop-filter: blur(6px);
+            background: rgba(17, 17, 17, .4);
+            backdrop-filter: blur(4px);
             display: none;
             align-items: center;
             justify-content: center;
@@ -391,41 +498,39 @@
 
         @keyframes overlayIn {
             from {
-                opacity: 0
+                opacity: 0;
             }
 
             to {
-                opacity: 1
+                opacity: 1;
             }
         }
 
         #modal-box {
             background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 24px;
+            border: 1px solid var(--border2);
             width: 100%;
             max-width: 520px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 24px 80px rgba(15, 25, 35, .18);
-            animation: modalUp .28s cubic-bezier(.22, 1, .36, 1);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, .15);
+            animation: modalUp .3s cubic-bezier(.16, 1, .3, 1);
         }
 
         @keyframes modalUp {
             from {
                 opacity: 0;
-                transform: translateY(28px)
+                transform: translateY(20px);
             }
 
             to {
                 opacity: 1;
-                transform: translateY(0)
+                transform: translateY(0);
             }
         }
 
-        /* Modal scrollbar */
         #modal-box::-webkit-scrollbar {
-            width: 4px;
+            width: 3px;
         }
 
         #modal-box::-webkit-scrollbar-track {
@@ -433,16 +538,37 @@
         }
 
         #modal-box::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 4px;
+            background: var(--subtle);
         }
 
-        /* Modal close btn */
+        .modal-header {
+            padding: 24px 24px 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .modal-label {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .modal-title {
+            font-family: var(--ff-display);
+            font-size: 28px;
+            font-weight: 400;
+            color: var(--ink);
+            line-height: 1;
+        }
+
         .modal-close {
-            width: 34px;
-            height: 34px;
-            border-radius: 8px;
-            border: 1.5px solid var(--border);
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
             background: var(--white);
             display: grid;
             place-items: center;
@@ -453,23 +579,59 @@
         }
 
         .modal-close:hover {
-            border-color: var(--blue);
-            color: var(--blue);
-            background: var(--blue-xs);
+            border-color: var(--ink);
+            color: var(--ink);
         }
 
-        /* Info grid in modal */
+        .m-divider {
+            height: 1px;
+            background: var(--border2);
+            margin: 20px 24px;
+        }
+
+        .modal-body {
+            padding: 0 24px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .modal-status-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .modal-date {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 300;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        @media (max-width:480px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .info-tile {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 12px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border2);
+            padding: 14px 16px;
         }
 
         .info-tile-label {
             font-size: 10px;
-            font-weight: 700;
-            letter-spacing: .12em;
+            font-weight: 500;
+            letter-spacing: .14em;
             text-transform: uppercase;
             color: var(--muted);
             margin-bottom: 4px;
@@ -477,18 +639,42 @@
 
         .info-tile-val {
             font-size: 13px;
-            font-weight: 700;
+            font-weight: 500;
             color: var(--ink);
         }
 
-        /* Modal divider */
-        .m-divider {
-            height: 1px;
-            background: linear-gradient(to right, transparent, var(--border), transparent);
-            margin: 16px 0;
+        .modal-note {
+            background: var(--bg);
+            border: 1px solid var(--border2);
+            padding: 14px 16px;
         }
 
-        /* Timeline */
+        .modal-note-label {
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .modal-note-text {
+            font-size: 13px;
+            color: var(--ink2);
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        /* TIMELINE */
+        .tl-heading {
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+
         .timeline {
             position: relative;
             padding-left: 28px;
@@ -498,11 +684,10 @@
             content: '';
             position: absolute;
             left: 8px;
-            top: 6px;
-            bottom: 6px;
-            width: 2px;
+            top: 4px;
+            bottom: 4px;
+            width: 1px;
             background: var(--border);
-            border-radius: 2px;
         }
 
         .tl-item {
@@ -521,7 +706,7 @@
             width: 18px;
             height: 18px;
             border-radius: 50%;
-            border: 2px solid var(--border);
+            border: 1.5px solid var(--border);
             background: var(--white);
             display: grid;
             place-items: center;
@@ -529,74 +714,79 @@
         }
 
         .tl-dot.done {
-            background: var(--blue);
-            border-color: var(--blue);
+            background: var(--ink);
+            border-color: var(--ink);
             color: white;
         }
 
         .tl-dot.active {
             background: var(--white);
-            border-color: var(--blue);
-            box-shadow: 0 0 0 3px rgba(42, 125, 225, .15);
+            border-color: var(--ink);
+            box-shadow: 0 0 0 3px rgba(17, 17, 17, .08);
         }
 
         .tl-label {
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 500;
             color: var(--ink);
         }
 
         .tl-label.dim {
-            color: var(--stone);
+            color: var(--subtle);
         }
 
         .tl-time {
             font-size: 11px;
             margin-top: 2px;
             color: var(--muted);
+            font-weight: 300;
         }
 
         .tl-time.active-time {
-            color: var(--blue);
-            font-weight: 600;
+            color: var(--ink);
+            font-weight: 500;
         }
 
         .tl-time.dim-time {
-            color: var(--stone);
+            color: var(--subtle);
         }
 
-        /* WA Button in modal */
-        .btn-wa-modal {
-            width: 100%;
+        /* FOOTER */
+        footer {
+            background: var(--ink);
+            padding: 28px 48px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: #16a34a;
-            color: white;
-            padding: 14px 24px;
-            border-radius: 10px;
-            font-family: 'Syne', sans-serif;
-            font-weight: 700;
-            font-size: 13px;
-            letter-spacing: .06em;
-            text-transform: uppercase;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all .25s cubic-bezier(.34, 1.4, .64, 1);
-            box-shadow: 0 4px 20px rgba(21, 128, 61, .25);
+            border-top: 1px solid rgba(255, 255, 255, .06);
         }
 
-        .btn-wa-modal:hover {
-            background: #15803d;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(21, 128, 61, .35);
+        @media (max-width:560px) {
+            footer {
+                padding: 24px;
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
         }
 
-        /* ── SCROLLBAR ── */
+        .footer-logo {
+            font-family: var(--ff-display);
+            font-weight: 600;
+            font-size: 16px;
+            letter-spacing: .02em;
+            color: var(--white);
+        }
+
+        .footer-copy {
+            font-size: 11px;
+            font-weight: 300;
+            letter-spacing: .04em;
+            color: rgba(255, 255, 255, .25);
+        }
+
         ::-webkit-scrollbar {
-            width: 4px;
+            width: 3px;
         }
 
         ::-webkit-scrollbar-track {
@@ -604,113 +794,64 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 4px;
-        }
-
-        ::selection {
-            background: var(--blue);
-            color: white;
+            background: var(--subtle);
         }
     </style>
 </head>
 
 <body>
 
-    <div class="noise"></div>
-    <div class="bg-blobs"></div>
-    <div class="cur-dot" id="cur-dot"></div>
-    <div class="cur-ring" id="cur-ring"></div>
-
-    <!-- ── NAV ── -->
-    <nav>
-        <div class="max-w-3xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="{{ route('welcome') }}" class="nav-logo">TIERRA<span>STONE</span></a>
-            <div class="flex items-center gap-5">
-                <a href="{{ route('order') }}" class="nav-cta-sm hidden sm:inline-flex items-center gap-2">
-                    <i class="fa-solid fa-pen-to-square" style="font-size:10px"></i> Buat Pesanan
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="{{ route('welcome') }}" class="nav-logo">TierraStone</a>
+            <div class="nav-right">
+                <a href="{{ route('order') }}" class="nav-cta">
+                    <i class="fa-solid fa-pen-to-square"></i> Buat Pesanan
                 </a>
-                <a href="{{ route('welcome') }}" class="nav-link-sm">
-                    <i class="fa-solid fa-arrow-left" style="font-size:10px"></i> Beranda
+                <a href="{{ route('welcome') }}" class="nav-link">
+                    <i class="fa-solid fa-arrow-left"></i> Beranda
                 </a>
             </div>
         </div>
     </nav>
 
-    <main class="relative z-10 max-w-2xl mx-auto px-4 py-12 pb-20">
+    <div class="page-header">
+        <div class="page-header-label">Tracking Pesanan</div>
+        <h1>Lacak <em>Pesanan</em> Anda</h1>
+        <p>Masukkan nomor order untuk melihat status pesanan.</p>
+    </div>
 
-        <!-- Header -->
-        <div class="pu d1 text-center mb-10">
-            <div style="display:inline-flex; align-items:center; justify-content:center;
-                    width:52px; height:52px; border-radius:14px;
-                    background:var(--blue-xs); border:1px solid var(--blue-lt); margin-bottom:18px">
-                <i class="fa-solid fa-magnifying-glass" style="color:var(--blue); font-size:18px"></i>
-            </div>
-            <div style="display:inline-flex; align-items:center; gap:10px; margin-bottom:12px; display:flex; justify-content:center">
-                <div style="width:20px; height:1.5px; background:var(--blue)"></div>
-                <span style="font-size:10px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--blue)">Tracking Pesanan</span>
-                <div style="width:20px; height:1.5px; background:var(--blue)"></div>
-            </div>
-            <h1 style="font-family:'Cormorant',serif; font-size:clamp(38px,5vw,56px); font-weight:300; line-height:.95; color:var(--ink)">
-                Lacak <em style="font-style:italic; color:var(--blue)">Pesanan</em> Anda
-            </h1>
-            <p style="font-size:14px; color:var(--body); margin-top:12px">
-                Masukkan nomor order, nomor HP, atau nama untuk melihat status pesanan.
-            </p>
-        </div>
-
-        <!-- Search Card -->
-        <div class="card p-6 mb-5 pu d2">
+    <div class="main">
+        <div class="search-card">
             <div class="search-wrap">
-                <input type="text" id="search-input"
-                    placeholder="Cari: ORD-20260001 / nomor HP / nama..."
-                    onkeydown="if(event.key==='Enter') doSearch()">
-                <button onclick="doSearch()" title="Cari">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
+                <input type="text" id="search-input" placeholder="Cari: ORD-20260001" onkeydown="if(event.key==='Enter') doSearch()">
+                <button onclick="doSearch()" title="Cari"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
-            <p style="font-size:11px; color:var(--muted); margin-top:10px; display:flex; align-items:center; gap:6px">
-                <i class="fa-solid fa-circle-info" style="color:var(--blue)"></i>
+            <div class="search-hint">
+                <i class="fa-solid fa-circle-info"></i>
                 Gunakan nomor pesanan yang Anda terima via WhatsApp dari tim kami.
-            </p>
+            </div>
         </div>
+        <div id="results-area"></div>
+    </div>
 
-        <!-- Results -->
-        <div id="results-area" class="pu d3"></div>
-
-    </main>
-
-    <!-- ── MODAL ── -->
+    <!-- MODAL -->
     <div id="modal-overlay" onclick="closeModalOutside(event)">
         <div id="modal-box">
-
-            <!-- Modal header -->
-            <div style="padding:24px 24px 0; display:flex; align-items:flex-start; justify-content:space-between">
+            <div class="modal-header">
                 <div>
-                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px">
-                        <div style="width:4px; height:14px; background:var(--blue); border-radius:2px"></div>
-                        <span style="font-size:10px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--blue)">Detail Pesanan</span>
-                    </div>
-                    <h2 id="m-order-id" style="font-family:'Cormorant',serif; font-size:30px; font-weight:600; color:var(--ink); line-height:1">—</h2>
+                    <div class="modal-label">Detail Pesanan</div>
+                    <h2 id="m-order-id" class="modal-title">—</h2>
                 </div>
-                <button class="modal-close" onclick="closeModal()">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-
-            <div class="m-divider" style="margin:16px 24px 0"></div>
-
-            <!-- Modal body -->
-            <div style="padding:20px 24px; display:flex; flex-direction:column; gap:16px">
-
-                <!-- Status + date -->
-                <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px">
+            <div class="m-divider"></div>
+            <div class="modal-body">
+                <div class="modal-status-row">
                     <div id="m-status-badge"></div>
-                    <span id="m-date" style="font-size:11px; color:var(--muted)"></span>
+                    <span id="m-date" class="modal-date"></span>
                 </div>
-
-                <!-- Info grid -->
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+                <div class="info-grid">
                     <div class="info-tile">
                         <div class="info-tile-label">Nama</div>
                         <div class="info-tile-val" id="m-nama">—</div>
@@ -736,69 +877,24 @@
                         <div class="info-tile-val" id="m-tipe">—</div>
                     </div>
                 </div>
-
-                <!-- Catatan -->
-                <div id="m-catatan-wrap" class="hidden"
-                    style="background:var(--blue-xs); border:1px solid var(--blue-lt); border-radius:12px; padding:14px">
-                    <p style="font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--blue); margin-bottom:6px">
-                        <i class="fa-solid fa-note-sticky" style="margin-right:5px"></i>Catatan
-                    </p>
-                    <p id="m-catatan" style="font-size:13px; color:var(--ink2)"></p>
+                <div id="m-catatan-wrap" class="modal-note" style="display:none">
+                    <div class="modal-note-label"><i class="fa-solid fa-note-sticky" style="margin-right:5px"></i>Catatan</div>
+                    <p id="m-catatan" class="modal-note-text"></p>
                 </div>
-
-                <!-- Timeline -->
                 <div>
-                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px">
-                        <div style="width:4px; height:12px; background:var(--muted); border-radius:2px"></div>
-                        <span style="font-size:10px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--muted)">Riwayat Status</span>
-                    </div>
+                    <div class="tl-heading">Riwayat Status</div>
                     <div class="timeline" id="m-timeline"></div>
                 </div>
-            </div>
-
-            <!-- Modal footer -->
-            <div style="padding:0 24px 24px">
-                <a id="m-wa-link" href="#" target="_blank" class="btn-wa-modal">
-                    <i class="fa-brands fa-whatsapp" style="font-size:17px"></i> Hubungi via WhatsApp
-                </a>
             </div>
         </div>
     </div>
 
-    <!-- ── FOOTER ── -->
-    <footer style="background:var(--ink); padding:36px 48px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; position:relative; z-index:10">
-        <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:15px; letter-spacing:.14em; text-transform:uppercase; color:var(--white)">
-            TIERRA<span style="color:var(--blue)">STONE</span>
-        </div>
-        <div style="font-size:11px; color:var(--stone); letter-spacing:.07em">&copy; 2026 OMS TierraStone. All rights reserved.</div>
+    <footer>
+        <div class="footer-logo">TierraStone</div>
+        <div class="footer-copy">&copy; 2026 TierraStone. All rights reserved.</div>
     </footer>
 
     <script>
-        // ── CURSOR ──
-        const dot = document.getElementById('cur-dot');
-        const ring = document.getElementById('cur-ring');
-        let mx = 0,
-            my = 0,
-            rx = 0,
-            ry = 0;
-        document.addEventListener('mousemove', e => {
-            mx = e.clientX;
-            my = e.clientY;
-        });
-        (function raf() {
-            dot.style.left = mx + 'px';
-            dot.style.top = my + 'px';
-            rx += (mx - rx) * .12;
-            ry += (my - ry) * .12;
-            ring.style.left = rx + 'px';
-            ring.style.top = ry + 'px';
-            requestAnimationFrame(raf);
-        })();
-
-        // ── CONFIG ──
-        const WA_NUMBER = '6289530513637';
-
-        // ── MOCK DATA ──
         const MOCK_ORDERS = [{
                 id: 'ORD-20260001',
                 nama: 'Budi Santoso',
@@ -808,33 +904,33 @@
                 kota: 'Jakarta Selatan',
                 tipe: 'Rumah Tinggal',
                 catatan: 'Mohon warna cream/beige, finishing polished.',
-                status: 'shipped',
+                status: 'ready_to_send',
                 tanggal: '28 Feb 2026',
                 timeline: [{
-                        label: 'Pesanan diterima',
+                        label: 'Pending',
                         time: '28 Feb 2026, 09.15',
                         done: true
                     },
                     {
-                        label: 'Dikonfirmasi tim',
+                        label: 'Production',
                         time: '28 Feb 2026, 11.30',
                         done: true
                     },
                     {
-                        label: 'Diproses & dikemas',
+                        label: 'On Working',
                         time: '1 Mar 2026, 08.00',
                         done: true
                     },
                     {
-                        label: 'Dikirim ke lokasi',
+                        label: 'Ready to Send',
                         time: '3 Mar 2026, 14.00',
-                        done: true
+                        done: true,
+                        active: true
                     },
                     {
-                        label: 'Terkirim',
-                        time: 'Menunggu konfirmasi',
-                        done: false,
-                        active: true
+                        label: 'Done',
+                        time: '—',
+                        done: false
                     },
                 ]
             },
@@ -847,31 +943,31 @@
                 kota: 'Surabaya',
                 tipe: 'Komersial / Perkantoran',
                 catatan: '',
-                status: 'process',
+                status: 'on_working',
                 tanggal: '3 Mar 2026',
                 timeline: [{
-                        label: 'Pesanan diterima',
+                        label: 'Pending',
                         time: '3 Mar 2026, 10.00',
                         done: true
                     },
                     {
-                        label: 'Dikonfirmasi tim',
+                        label: 'Production',
                         time: '3 Mar 2026, 12.45',
                         done: true
                     },
                     {
-                        label: 'Diproses & dikemas',
+                        label: 'On Working',
                         time: 'Sedang berjalan',
                         done: false,
                         active: true
                     },
                     {
-                        label: 'Dikirim ke lokasi',
+                        label: 'Ready to Send',
                         time: '—',
                         done: false
                     },
                     {
-                        label: 'Terkirim',
+                        label: 'Done',
                         time: '—',
                         done: false
                     },
@@ -889,28 +985,28 @@
                 status: 'pending',
                 tanggal: '5 Mar 2026',
                 timeline: [{
-                        label: 'Pesanan diterima',
+                        label: 'Pending',
                         time: '5 Mar 2026, 08.30',
-                        done: true
-                    },
-                    {
-                        label: 'Menunggu konfirmasi tim',
-                        time: 'Dalam antrian',
-                        done: false,
+                        done: true,
                         active: true
                     },
                     {
-                        label: 'Diproses & dikemas',
+                        label: 'Production',
                         time: '—',
                         done: false
                     },
                     {
-                        label: 'Dikirim ke lokasi',
+                        label: 'On Working',
                         time: '—',
                         done: false
                     },
                     {
-                        label: 'Terkirim',
+                        label: 'Ready to Send',
+                        time: '—',
+                        done: false
+                    },
+                    {
+                        label: 'Done',
                         time: '—',
                         done: false
                     },
@@ -920,33 +1016,32 @@
 
         const STATUS_CONFIG = {
             pending: {
-                label: 'Menunggu Konfirmasi',
+                label: 'Pending',
                 icon: 'fa-clock',
                 cls: 'badge-pending'
             },
-            process: {
-                label: 'Diproses',
-                icon: 'fa-gear fa-spin',
-                cls: 'badge-process'
+            production: {
+                label: 'Production',
+                icon: 'fa-industry',
+                cls: 'badge-production'
             },
-            shipped: {
-                label: 'Dikirim',
-                icon: 'fa-truck-fast',
-                cls: 'badge-shipped'
+            on_working: {
+                label: 'On Working',
+                icon: 'fa-hammer',
+                cls: 'badge-on_working'
+            },
+            ready_to_send: {
+                label: 'Ready to Send',
+                icon: 'fa-box-open',
+                cls: 'badge-ready_to_send'
             },
             done: {
-                label: 'Selesai',
+                label: 'Done',
                 icon: 'fa-circle-check',
                 cls: 'badge-done'
             },
-            cancel: {
-                label: 'Dibatalkan',
-                icon: 'fa-circle-xmark',
-                cls: 'badge-cancel'
-            },
         };
 
-        // ── SEARCH ──
         function doSearch() {
             const raw = document.getElementById('search-input').value.trim().toLowerCase();
             const area = document.getElementById('results-area');
@@ -955,22 +1050,20 @@
                 return;
             }
 
-            // Skeleton
             area.innerHTML = `
-        <div class="card p-5" style="display:flex; flex-direction:column; gap:12px">
-            ${[1,2].map(()=>`
-            <div style="display:flex; align-items:center; gap:14px">
-                <div class="skeleton" style="width:40px; height:40px; flex-shrink:0; border-radius:10px"></div>
-                <div style="flex:1; display:flex; flex-direction:column; gap:7px">
-                    <div class="skeleton" style="height:13px; width:38%"></div>
-                    <div class="skeleton" style="height:11px; width:55%"></div>
-                </div>
-                <div class="skeleton" style="height:24px; width:90px; border-radius:999px"></div>
-            </div>`).join('')}
-        </div>`;
+                <div class="results-card" style="display:flex; flex-direction:column; gap:12px; padding:24px">
+                    ${[1,2].map(() => `
+                    <div style="display:flex; align-items:center; gap:14px">
+                        <div class="skeleton" style="width:42px; height:42px; flex-shrink:0"></div>
+                        <div style="flex:1; display:flex; flex-direction:column; gap:7px">
+                            <div class="skeleton" style="height:13px; width:38%"></div>
+                            <div class="skeleton" style="height:11px; width:55%"></div>
+                        </div>
+                        <div class="skeleton" style="height:24px; width:90px"></div>
+                    </div>`).join('')}
+                </div>`;
 
             setTimeout(() => {
-                // ── Replace with: fetch('/api/orders/search?q='+raw) ──
                 const results = MOCK_ORDERS.filter(o =>
                     o.phone.replace(/\D/g, '').includes(raw.replace(/\D/g, '')) ||
                     o.id.toLowerCase().includes(raw) ||
@@ -984,42 +1077,35 @@
             const area = document.getElementById('results-area');
             if (!orders.length) {
                 area.innerHTML = `
-            <div class="card">
-                <div class="empty-state">
-                    <i class="fa-solid fa-box-open"></i>
-                    <p style="font-weight:700; font-size:15px; color:var(--ink2); margin-bottom:6px">Pesanan tidak ditemukan</p>
-                    <p style="font-size:13px; color:var(--muted)">Coba gunakan nomor order, nomor HP, atau nama yang tepat.</p>
-                </div>
-            </div>`;
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class="fa-solid fa-box-open"></i></div>
+                        <div class="empty-title">Pesanan tidak ditemukan</div>
+                        <div class="empty-desc">Coba gunakan nomor order yang tepat.</div>
+                    </div>`;
                 return;
             }
 
             const rows = orders.map(o => {
                 const st = STATUS_CONFIG[o.status] || STATUS_CONFIG.pending;
                 return `
-        <div class="order-row" onclick="openModal('${o.id}')">
-            <div class="order-icon"><i class="fa-solid fa-box"></i></div>
-            <div style="flex:1; min-width:0">
-                <p style="font-size:13px; font-weight:700; color:var(--ink)">${o.id}</p>
-                <p style="font-size:11px; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:2px">${o.produk} · ${o.qty} · ${o.kota}</p>
-            </div>
-            <span class="badge ${st.cls}">
-                <i class="fa-solid ${st.icon}"></i>${st.label}
-            </span>
-            <i class="fa-solid fa-chevron-right" style="color:var(--stone); font-size:11px; flex-shrink:0"></i>
-        </div>`;
+                <div class="order-row" onclick="openModal('${o.id}')">
+                    <div class="order-icon"><i class="fa-solid fa-box"></i></div>
+                    <div class="order-info">
+                        <div class="order-id">${o.id}</div>
+                        <div class="order-meta">${o.produk} · ${o.qty} · ${o.kota}</div>
+                    </div>
+                    <span class="badge ${st.cls}"><i class="fa-solid ${st.icon}"></i>${st.label}</span>
+                    <i class="fa-solid fa-chevron-right order-chevron"></i>
+                </div>`;
             }).join('');
 
             area.innerHTML = `
-        <div class="card p-5">
-            <p style="font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.06em; margin-bottom:12px">
-                ${orders.length} pesanan ditemukan
-            </p>
-            <div style="display:flex; flex-direction:column; gap:8px">${rows}</div>
-        </div>`;
+                <div class="results-card">
+                    <div class="results-count">${orders.length} pesanan ditemukan</div>
+                    <div class="results-list">${rows}</div>
+                </div>`;
         }
 
-        // ── MODAL ──
         function openModal(orderId) {
             const o = MOCK_ORDERS.find(x => x.id === orderId);
             if (!o) return;
@@ -1039,23 +1125,20 @@
 
             const noteWrap = document.getElementById('m-catatan-wrap');
             if (o.catatan) {
-                noteWrap.classList.remove('hidden');
+                noteWrap.style.display = 'block';
                 document.getElementById('m-catatan').textContent = o.catatan;
             } else {
-                noteWrap.classList.add('hidden');
+                noteWrap.style.display = 'none';
             }
 
             document.getElementById('m-timeline').innerHTML = o.timeline.map(t => `
-        <div class="tl-item">
-            <div class="tl-dot ${t.done ? 'done' : t.active ? 'active' : ''}">
-                ${t.done ? '<i class="fa-solid fa-check"></i>' : ''}
-            </div>
-            <p class="tl-label ${!t.done && !t.active ? 'dim' : ''}">${t.label}</p>
-            <p class="tl-time ${t.active ? 'active-time' : !t.done ? 'dim-time' : ''}">${t.time}</p>
-        </div>`).join('');
-
-            const msg = encodeURIComponent(`Halo TierraStone, saya ingin menanyakan status pesanan:\n\n🔖 *No. Order:* ${o.id}\n👤 *Nama:* ${o.nama}\n\nMohon informasinya. Terima kasih!`);
-            document.getElementById('m-wa-link').href = `https://wa.me/${WA_NUMBER}?text=${msg}`;
+                <div class="tl-item">
+                    <div class="tl-dot ${t.done ? 'done' : t.active ? 'active' : ''}">
+                        ${t.done ? '<i class="fa-solid fa-check"></i>' : ''}
+                    </div>
+                    <p class="tl-label ${!t.done && !t.active ? 'dim' : ''}">${t.label}</p>
+                    <p class="tl-time ${t.active ? 'active-time' : !t.done ? 'dim-time' : ''}">${t.time}</p>
+                </div>`).join('');
 
             document.getElementById('modal-overlay').classList.add('open');
             document.body.style.overflow = 'hidden';
@@ -1073,7 +1156,6 @@
             if (e.key === 'Escape') closeModal();
         });
 
-        // ── URL PARAM ──
         window.addEventListener('DOMContentLoaded', () => {
             const q = new URLSearchParams(window.location.search).get('q');
             if (q) {
