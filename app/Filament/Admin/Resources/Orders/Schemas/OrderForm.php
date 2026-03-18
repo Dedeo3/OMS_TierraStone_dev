@@ -58,11 +58,12 @@ class OrderForm
                             Select::make('status')
                                 ->label('Status Pesanan')
                                 ->options([
-                                    'pending'     => 'Pending',
-                                    'on_hold'     => 'On Hold',
-                                    'on_progress' => 'On Progress',
-                                    'finished'    => 'Finished',
-                                    'rejected'    => 'Rejected',
+                                    'pending'          => 'Pending',
+                                    'production'       => 'Production',
+                                    'on_progress'      => 'On Progress',
+                                    'ready_to_deliver' => 'Ready to Deliver',
+                                    'rejected'         => 'Rejected',
+                                    'done'             => 'Done',
                                 ])
                                 ->default('pending')
                                 ->native(false)
