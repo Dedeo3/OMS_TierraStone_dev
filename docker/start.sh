@@ -4,7 +4,6 @@ set -x
 php-fpm -D
 
 php artisan migrate --force
-
 php artisan storage:link --force
 
 cat > /etc/nginx/http.d/default.conf << EOF
@@ -26,9 +25,8 @@ server {
 }
 EOF
 
-echo "=== nginx config ===" 
-cat /etc/nginx/http.d/default.conf
-echo "=== test nginx ===" 
-nginx -t
-echo "=== starting nginx ==="
-nginx -g "daemon off;"
+# Kill any existing nginx
+pkill nginx || true
+
+nginx -g "daemon off;" 2>&1
+echo "nginx exited: $?"
