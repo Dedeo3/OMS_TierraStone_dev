@@ -35,5 +35,5 @@ EXPOSE 80
 CMD sh -c "php artisan storage:link --force && \
     php-fpm -D && \
     php artisan migrate --force && \
-    envsubst '\$PORT' < /etc/nginx/http.d/default.conf > /tmp/nginx.conf && \
-    nginx -c /tmp/nginx.conf -g 'daemon off;'"
+    sed -i \"s/listen 80/listen \${PORT}/g\" /etc/nginx/http.d/default.conf && \
+    nginx -g 'daemon off;'"
