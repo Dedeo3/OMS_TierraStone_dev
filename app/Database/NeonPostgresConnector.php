@@ -12,7 +12,7 @@ class NeonPostgresConnector extends PostgresConnector
         $endpointId = explode('.', $config['host'])[0];
 
         $dsn = sprintf(
-            'pgsql:host=%s;port=%d;dbname=%s;options=endpoint%%3D%s',
+            'pgsql:host=%s;port=%d;dbname=%s;options=endpoint=%s',
             $config['host'],
             $config['port'],
             $config['database'],
