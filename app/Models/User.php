@@ -48,6 +48,10 @@ class User extends Authenticatable
     }
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->hasRole('admin');
+        return match($panel->getId()) {
+            'admin' => $this->hasRole('admin'),
+            'sales' => $this->hasAnyRole(['sales', 'mandor']),
+            default => false,
+        };
     }
 }

@@ -32,6 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin') // URL: website.com/admin
             ->brandName('Tierra Stone')
             ->login()
+            ->authGuard('web')
             ->registration(false)
             ->resources([
                 \App\Filament\Admin\Resources\Orders\OrderResource::class,

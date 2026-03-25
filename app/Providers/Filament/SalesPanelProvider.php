@@ -31,6 +31,7 @@ class SalesPanelProvider extends PanelProvider
             ->brandName('Tierra Stone')
             ->default()
             ->login()
+            ->authGuard('web')
             ->registration(false)
             ->colors([
                 'primary' => Color::Amber,
