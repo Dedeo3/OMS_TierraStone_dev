@@ -30,8 +30,6 @@ RUN npm install && npm run build
 
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-COPY docker/nginx.conf /etc/nginx/http.d/default.conf
-
 EXPOSE 80
 
 CMD ["/bin/sh", "/var/www/docker/start.sh"]
