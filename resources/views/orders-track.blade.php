@@ -270,12 +270,12 @@
                 `<span class="badge ${st.cls}"><i class="fa-solid ${st.icon}" style="margin-right:4px"></i>${st.label}</span>`;
 
             // Production status
-            const prodSt = o.production_status;
-            if (prodSt) {
-                const prodLabel = prodSt.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-                document.getElementById('m-status-badge').innerHTML +=
-                    ` <span class="badge badge-production" style="margin-left:6px"><i class="fa-solid fa-wrench" style="margin-right:4px"></i>${prodLabel}</span>`;
-            }
+            // const prodSt = o.production_status;
+            // if (prodSt) {
+            //     const prodLabel = prodSt.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+            //     document.getElementById('m-status-badge').innerHTML +=
+            //         ` <span class="badge badge-production" style="margin-left:6px"><i class="fa-solid fa-wrench" style="margin-right:4px"></i>${prodLabel}</span>`;
+            // }
 
             // Catatan
             const noteWrap = document.getElementById('m-catatan-wrap');
