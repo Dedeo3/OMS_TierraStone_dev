@@ -23,7 +23,6 @@ class OrdersTable
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'pending'          => 'warning',
-                        'production'       => 'info',
                         'on_progress'      => 'primary',
                         'ready_to_deliver' => 'success',
                         'rejected'         => 'danger',
@@ -51,7 +50,6 @@ class OrdersTable
                 SelectFilter::make('status')
                     ->options([
                         'pending'          => 'Pending',
-                        'production'       => 'Production',
                         'on_progress'      => 'On Progress',
                         'ready_to_deliver' => 'Ready to Deliver',
                         'rejected'         => 'Rejected',

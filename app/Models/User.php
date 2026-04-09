@@ -17,12 +17,18 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'is_active',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'sales_id');
+    }
 
     protected function casts(): array
     {
@@ -34,6 +40,6 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        return $this->is_active;
     }
 }

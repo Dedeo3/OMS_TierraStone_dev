@@ -6,6 +6,7 @@ use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Illuminate\Support\Facades\Hash;
 
 class UserForm
@@ -44,6 +45,17 @@ class UserForm
                 ->icon('heroicon-o-shield-check')
                 ->iconColor('warning')
                 ->schema([
+                    Toggle::make('is_active')
+                        ->label('Akun Aktif')
+                        ->default(true)
+                        ->onColor('success')
+                        ->offColor('danger')
+                        ->disabled(fn ($record) => $record?->email === 'admin@admin.com')
+                        ->helperText(fn ($record) => $record?->email === 'admin@admin.com'
+                            ? 'Akun admin utama tidak dapat dinonaktifkan.'
+                            : null
+                        ),
+
                     Select::make('role')
                         ->label('Role')
                         ->options([

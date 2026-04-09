@@ -27,17 +27,7 @@ class FinishingTypesTable
             ])
             ->recordActions([
                 EditAction::make(),
-                DeleteAction::make()
-                    ->before(function ($record, $action) {
-                        if ($record->orderItems()->exists()) {
-                            $action->halt();
-                            \Filament\Notifications\Notification::make()
-                                ->title('Tidak bisa dihapus')
-                                ->body('Finishing ini sudah digunakan dalam pesanan.')
-                                ->danger()
-                                ->send();
-                        }
-                    }),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
