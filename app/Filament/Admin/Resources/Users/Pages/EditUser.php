@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Resources\Users\Pages;
 use App\Filament\Admin\Resources\Users\UserResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Notifications\Notification;
 
 class EditUser extends EditRecord
 {
@@ -25,7 +26,30 @@ class EditUser extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            DeleteAction::make(),
+            DeleteAction::make()
+                ->before(function ($action) {
+                    $record = $this->record;
+
+                    // Proteksi admin utama
+                    if ($record->email === 'admin@admin.com') {
+                        Notification::make()
+                            ->title('Tidak bisa dihapus')
+                            ->body('Akun admin utama tidak dapat dihapus.')
+                            ->danger()
+                            ->send();
+                        $action->halt();
+                        return;
+                    }
+
+                    if ($record->orders()->exists()) {
+                        Notification::make()
+                            ->title('Tidak bisa dihapus')
+                            ->body('User ini memiliki order yang tercatat dalam sistem.')
+                            ->danger()
+                            ->send();
+                        $action->halt();
+                    }
+                }),
         ];
     }
 }

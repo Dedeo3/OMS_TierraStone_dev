@@ -11,6 +11,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\DatePicker;
 
 use App\Models\StoneType;
 use App\Models\FinishingType;
@@ -59,7 +60,6 @@ class OrderForm
                                 ->label('Status Pesanan')
                                 ->options([
                                     'pending'          => 'Pending',
-                                    'production'       => 'Production',
                                     'on_progress'      => 'On Progress',
                                     'ready_to_deliver' => 'Ready to Deliver',
                                     'rejected'         => 'Rejected',
@@ -91,6 +91,14 @@ class OrderForm
                                 ->default(0)
                                 ->prefixIcon('heroicon-o-truck')
                                 ->prefix('Rp')
+                                ->disabled($isMandor),
+
+                            DatePicker::make('estimated_finish_date')
+                                ->label('Estimasi Tanggal Selesai')
+                                ->prefixIcon('heroicon-o-calendar')
+                                ->native(false)
+                                ->minDate(now())
+                                ->displayFormat('d M Y')
                                 ->disabled($isMandor)
                         ]),
                     ]),

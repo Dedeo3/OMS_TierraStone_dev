@@ -3,14 +3,19 @@ set -x
 
 php-fpm -D
 
+sleep 2
+
 php artisan migrate --force
-php artisan db:seed --force
 php artisan permission:cache-reset
 php artisan storage:link --force
+php artisan config:clear
+php artisan cache:clear
+
+APP_PORT=${PORT:-80}
 
 cat > /etc/nginx/http.d/default.conf << EOF
 server {
-    listen ${PORT};
+    listen ${APP_PORT};
     root /var/www/public;
     index index.php;
 

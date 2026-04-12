@@ -10,6 +10,7 @@ use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Filters\TernaryFilter;
+use Filament\Notifications\Notification;
 
 class StoneTypesTable
 {
@@ -39,12 +40,13 @@ class StoneTypesTable
                 DeleteAction::make()
                     ->before(function ($record, $action) {
                         if ($record->orderItems()->exists()) {
-                            $action->halt(); // stop the action
-                            \Filament\Notifications\Notification::make()
+                            Notification::make()
                                 ->title('Tidak bisa dihapus')
                                 ->body('Jenis batu ini sudah digunakan dalam pesanan.')
                                 ->danger()
                                 ->send();
+
+                            $action->halt();
                         }
                     }),
             ])

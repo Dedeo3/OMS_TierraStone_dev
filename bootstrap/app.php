@@ -12,7 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->trustProxies(at: '*');
+        $middleware->alias([
+            'admin.panel' => \App\Http\Middleware\AdminPanelMiddleware::class,
+            'sales.panel' => \App\Http\Middleware\SalesPanelMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
